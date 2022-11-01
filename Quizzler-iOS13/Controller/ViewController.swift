@@ -15,15 +15,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var trueButton: UIButton!
     @IBOutlet weak var falseButton: UIButton!
     
-    
-    let quiz = [
-        ["Four + Two is equal to Six", "True"],
-        ["Five - Three is greater than One", "True"],
-        ["Three + Eight is less than Ten", "Flase"]
-        ]
+    var quizBrain = QuizBrain()
     
     
-    var questionNumber = 0
+    
+   
     
     
     
@@ -35,13 +31,15 @@ class ViewController: UIViewController {
 
     @IBAction func answerButtonPressed(_ sender: UIButton) {
         let userAnswer = sender.currentTitle // True or False
-        let actualAnswer = quiz[questionNumber][1]
+        quizBrain.checkAnswer(userAnswer)
+        
         
         if userAnswer == actualAnswer {
-            print("Right!")
+            sender.backgroundColor = UIColor.green
             
         } else {
-            print("Wrong!")
+            sender.backgroundColor = UIColor.red
+            
             
         }
         
@@ -51,12 +49,14 @@ class ViewController: UIViewController {
             questionNumber = 0
         }
         
-        
-              updateUI()
+        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateUI), userInfo: nil, repeats: false)
+              
     }
-        func updateUI() {
-            questionLabel.text = quiz[questionNumber][0]
-       
+    @objc func updateUI() {
+            questionLabel.text = quiz[questionNumber].text
+            trueButton.backgroundColor = UIColor.clear
+            falseButton.backgroundColor = UIColor.clear
+        progressBar.progress = Float(questionNumber + 1) / Float(quiz.count)
     }
     
 }
